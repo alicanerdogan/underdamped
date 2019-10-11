@@ -1,0 +1,24 @@
+import React, { PureComponent } from "react";
+{{#if includeStyles}}
+import styled from "@emotion/styled";
+{{/if}}
+
+export interface I{{ pascalCase name }}Props {}
+
+interface I{{ pascalCase name }}State {}
+{{#if includeStyles}}
+
+export const {{ pascalCase name }}Style = styled.div``;
+{{/if}}
+
+export class {{ pascalCase name }} extends PureComponent<I{{ pascalCase name }}Props, I{{ pascalCase name }}State> {
+  state: I{{ pascalCase name }}State = {};
+
+  render() {
+    {{#if includeStyles}}
+    return <{{ pascalCase name }}Style>{}</{{ pascalCase name }}Style>;
+    {{else}}
+    return <div>{}</div>;
+    {{/if}}
+  }
+}

@@ -1,0 +1,20 @@
+import React, { memo } from 'react';
+{{#if includeStyles}}
+import styled from "@emotion/styled";
+{{/if}}
+
+export interface I{{ pascalCase name }}Props {}
+{{#if includeStyles}}
+
+export const {{ pascalCase name }}Style = styled.div``;
+{{/if}}
+
+export const {{ pascalCase name }}: React.FC<I{{ pascalCase name }}Props> = memo(({}: I{{ pascalCase name }}Props) => {
+  {{#if includeStyles}}
+  return <{{ pascalCase name }}Style>{}</{{ pascalCase name }}Style>;
+  {{else}}
+  return <div>{}</div>;
+  {{/if}}
+});
+
+{{ pascalCase name }}.displayName = "{{ pascalCase name }}";
