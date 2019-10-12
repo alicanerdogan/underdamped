@@ -12,6 +12,9 @@ const OptionLabel = styled.p`
   padding: 8px 16px;
   color: ${colors.gray[800]};
   margin: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
 `;
 
 const Option = styled.div`
@@ -21,23 +24,26 @@ const Option = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
 
-  ${OptionLabel} {
-    display: flex;
-    align-items: center;
+const SelectedOptionLabel = styled(OptionLabel)`
+  color: ${colors.white};
+`;
 
-    position: absolute;
-    z-index: 3;
-    height: 100%;
-    width: 100%;
-    transform: translate3d(0, 0, 0);
-  }
+const SelectedOptionContent = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+  pointer-events: none;
 `;
 
 const SelectedOptionIndicator = styled.div`
   height: 48px;
   background: ${colors.blue[500]};
   will-change: transform;
+  overflow: hidden;
 `;
 
 export const MultiSelectStyle = styled.div`
@@ -52,6 +58,7 @@ export const MultiSelectStyle = styled.div`
     position: absolute;
     left: 0;
     right: 0;
+    z-index: 2;
   }
 `;
 
@@ -68,12 +75,13 @@ function recursiveAnimate(
   });
 }
 
-const STIFFNESS = 500;
-const DAMPING = 50;
+const STIFFNESS = 250;
+const DAMPING = 20;
 
 export const MultiSelect: React.FC<MultiSelectProps> = memo(
   ({ options }: MultiSelectProps) => {
     const selectedIndexIndicatorRef = React.useRef<HTMLDivElement>();
+    const selectedOptionLabelRef = React.useRef<HTMLParagraphElement>();
     const selectedIndexRef = React.useRef(-1);
     const animationRef = React.useRef<Spring>();
 
@@ -82,15 +90,17 @@ export const MultiSelect: React.FC<MultiSelectProps> = memo(
       selectedIndexRef.current = index;
 
       const selectedIndexIndicatorEl = selectedIndexIndicatorRef.current;
-      if (!selectedIndexIndicatorEl) {
+      const selectedOptionLabelEl = selectedOptionLabelRef.current;
+      if (!selectedIndexIndicatorEl || !selectedOptionLabelEl) {
         return;
       }
+
+      const toValue = 48 * index;
 
       if (animationRef.current) {
         animationRef.current.stop();
         const initialVelocity = animationRef.current.currentVelocity;
         const fromValue = animationRef.current.currentValue;
-        const toValue = 48 * index;
         const animation = new Spring({
           initialVelocity,
           fromValue,
@@ -102,7 +112,6 @@ export const MultiSelect: React.FC<MultiSelectProps> = memo(
         animation.start();
       } else {
         const fromValue = 48 * prevSelectedIndex;
-        const toValue = 48 * index;
         const animation = new Spring({
           fromValue,
           toValue,
@@ -115,6 +124,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = memo(
 
       recursiveAnimate(animationRef.current, (value, isAtRest) => {
         selectedIndexIndicatorEl.style.transform = `translateY(${value}px)`;
+        selectedOptionLabelEl.style.transform = `translateY(${-value}px)`;
 
         if (isAtRest) {
           animationRef.current = undefined;
@@ -128,7 +138,17 @@ export const MultiSelect: React.FC<MultiSelectProps> = memo(
         <SelectedOptionIndicator
           style={{ transform }}
           ref={el => (selectedIndexIndicatorRef.current = el || undefined)}
-        />
+        >
+          <SelectedOptionContent
+            ref={el => (selectedOptionLabelRef.current = el || undefined)}
+          >
+            {options.map((option, index) => (
+              <SelectedOptionLabel key={option.value}>
+                {option.label}
+              </SelectedOptionLabel>
+            ))}
+          </SelectedOptionContent>
+        </SelectedOptionIndicator>
         {options.map((option, index) => (
           <Option key={option.value} onClick={() => onItemSelected(index)}>
             <OptionLabel>{option.label}</OptionLabel>
