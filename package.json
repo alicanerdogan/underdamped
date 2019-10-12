@@ -48,7 +48,8 @@
     "react-dom": "^16.10.2",
     "react-hot-loader": "^4.12.15",
     "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "wobble": "^1.5.1"
   },
   "scripts": {
     "start": "webpack-dev-server --mode=development --hot",

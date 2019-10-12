@@ -3,13 +3,13 @@ import React, { memo } from 'react';
 import styled from "@emotion/styled";
 {{/if}}
 
-export interface I{{ pascalCase name }}Props {}
+export interface {{ pascalCase name }}Props {}
 {{#if includeStyles}}
 
 export const {{ pascalCase name }}Style = styled.div``;
 {{/if}}
 
-export const {{ pascalCase name }}: React.FC<I{{ pascalCase name }}Props> = memo(({}: I{{ pascalCase name }}Props) => {
+export const {{ pascalCase name }}: React.FC<{{ pascalCase name }}Props> = memo(({}: {{ pascalCase name }}Props) => {
   {{#if includeStyles}}
   return <{{ pascalCase name }}Style>{}</{{ pascalCase name }}Style>;
   {{else}}
