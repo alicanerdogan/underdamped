@@ -43,7 +43,7 @@
     "@emotion/core": "^10.0.21",
     "@emotion/styled": "^10.0.17",
     "core-js": "3.2.1",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-hot-loader": "^4.12.15",
